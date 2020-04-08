@@ -1,0 +1,7 @@
+/.idea/
+/driver/
+/venv/
+/bsoup.template.py
+/curl.bash
+/fileWrite.template.py
+/selenium.template.py
