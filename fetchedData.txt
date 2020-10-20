@@ -1,0 +1,12 @@
+Product Name,
+Image 1,2,3,4 etc.
+Price
+Sale Price if available
+Model No.
+From the collection
+Finish
+Product Overview i.e.
+Description
+Manufcaturer Resource:
+Dimensions and Measurements
+Included Components
