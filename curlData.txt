@@ -1,0 +1,15 @@
+curl 'https://www.faucet.com/brizo-rp70917-brilliance-brushed-nickel-spout-flange-for-brizo-t60085-t60285-and-t60485-shower-valve-trim/f1907947' \
+  -H 'authority: www.faucet.com' \
+  -H 'pragma: no-cache' \
+  -H 'cache-control: no-cache' \
+  -H 'dnt: 1' \
+  -H 'upgrade-insecure-requests: 1' \
+  -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36' \
+  -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9' \
+  -H 'sec-fetch-site: none' \
+  -H 'sec-fetch-mode: navigate' \
+  -H 'sec-fetch-user: ?1' \
+  -H 'sec-fetch-dest: document' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'cookie: postalCode=60605; postalCodeSource=confirmed; postalCodeCity=Chicago; postalCodeStateAbbr=IL; CID=z6QQtrRRhqOD5QJjeGj5zsQmM-z_2UC_; _pxhd=e54ccd790533e69889b1a7e2f6ef66784651f935c1b098b9bff54cc67e4491a2:26acd3e0-2a6b-11eb-b723-7321d4acbd37; _dy_ses_load_seq=17747%3A1605792528325; _dy_csc_ses=t; _dy_c_exps=; _dy_soct=443084.788033.1605792528; AMCVS_F5FA1253512D2B590A490D45%40AdobeOrg=1; AMCV_F5FA1253512D2B590A490D45%40AdobeOrg=1687686476%7CMCMID%7C11876271068590642652164802362550091401%7CMCOPTOUT-1605799728s%7CNONE%7CvVersion%7C3.0.0; s_cc=true; _dycnst=dg; LastProduct=https://www.faucet.com/brizo-rp70917-brilliance-brushed-nickel-spout-flange-for-brizo-t60085-t60285-and-t60485-shower-valve-trim/f1907947; _dyid=3463268342686970641; _dyfs=1605792530848; _dyjsession=bb7cc8e3f886e1ea2815e5bcdce70b55; dy_fs_page=www.faucet.com%2Fbrizo-rp70917-brilliance-brushed-nickel-spout-flange-for-brizo-t60085-t60285-and-t60485-shower-valve-trim%2Ff1907947; _dy_lu_ses=bb7cc8e3f886e1ea2815e5bcdce70b55%3A1605792530849; _dycst=dk.l.c.ss.; _dy_geo=US.NA.US_IL.US_IL_Chicago; _dy_df_geo=United%20States.Illinois.Chicago; _dy_toffset=-1; _pxvid=26acd3e0-2a6b-11eb-b723-7321d4acbd37; bv_segment=%7B%22testId%22%3A%22rh_v3_always_on%22%2C%22segment%22%3A%22rh%7Cpro_con%22%7D; _px2=eyJ1IjoiMjk1NjIxZjAtMmE2Yi0xMWViLTk1YWYtNTViNWQ4ODg3ZmFkIiwidiI6IjI2YWNkM2UwLTJhNmItMTFlYi1iNzIzLTczMjFkNGFjYmQzNyIsInQiOjE2MDU3OTI4MzI4NDYsImgiOiJkOGE5ZDZlOWY0MzVkNTE2Njg0YWVmZjEyY2E1N2IxMmM2MmMxMjFjNGE5OTIwNDQxOTMwNzJhYTFmMjdjMGVjIn0=; _pxde=9fc15deb239b0d387202a6a147f2b4e655be7f535a242765eb1b181462275a7f:eyJ0aW1lc3RhbXAiOjE2MDU3OTI1MzI4NDYsImluY19pZCI6WyI3ZjNhMzcyZjQ1MTI1NGMxNmVhYmYwMDM3ODdhYjc1ZSJdfQ==; BVBRANDID=846f5777-51d9-46b0-a888-8d180fbc8379; BVBRANDSID=626950e7-713a-4f1d-9011-495da143b415; BVImplfaucet=8732_14_0' \
+  --compressed

@@ -1,10 +1,11 @@
+import csv
 import json
 
 import requests
 import re
 from bs4 import BeautifulSoup
 
-def numberOfPages(categID):
+def numberOfPages(categID, curlData):
     headers = {
         'authority': 'www.faucet.com',
         'pragma': 'no-cache',
@@ -18,6 +19,7 @@ def numberOfPages(categID):
         'sec-fetch-dest': 'empty',
         'referer': f'https://www.faucet.com/kitchen-faucets/c{categID}?r=48&s=SCORE&p=2&categoryId={categID}',
         'accept-language': 'en-US,en;q=0.9',
+        'cookie': re.findall(r"cookie: ([^\n]+)'", curlData)[0]
     }
 
     params = (
@@ -44,6 +46,7 @@ def searchPageData(pageNum, categID):
         'sec-fetch-dest': 'empty',
         'referer': f'https://www.faucet.com/kitchen-faucets/c{categID}?r=48&s=SCORE&p=2&categoryId={categID}',
         'accept-language': 'en-US,en;q=0.9',
+        'cookie': re.findall(r"cookie: ([^\n]+)'", curlData)[0]
     }
 
     params = (
@@ -75,6 +78,7 @@ def prodData(url):
         'sec-fetch-user': '?1',
         'sec-fetch-dest': 'document',
         'accept-language': 'en-US,en;q=0.9',
+        'cookie': re.findall(r"cookie: ([^\n]+)'", curlData)[0]
     }
 
     response = requests.get(url, headers=headers)
@@ -166,22 +170,43 @@ def csvBuiler(products):
             rowData.append(newCell)
         rows.append(rowData)
 
+def dedup(inArr):
+    res = []
+    for i in inArr:
+        if i not in res:
+            res.append(i)
+    return res
+
+
+def csvWrite(finalData, categID):
+    with open(f"Faucets Categ-{categID} Data.csv", 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(finalData)
+
+
+
 
 
 if __name__ == '__main__':
     with open("categIDs.txt","r") as categFile:
         categIDs = categFile.read().split("\n")
 
+
+    with open("curlData.txt","r") as fileCurl:
+        curlData = fileCurl.read()
+
     for categID in categIDs:
         if len(categID) > 2:
-            totalPageCount = numberOfPages(categID)
+            totalPageCount = numberOfPages(categID, curlData)
             urls = []
+            #TODO for pageNum in range(1,totalPageCount)[:2]:
             for pageNum in range(1,totalPageCount):
                 urls += searchPageData(str(pageNum), categID)
             # url = 'https://www.faucet.com/delta-9159-dst-black-stainless-trinsic-pull-down-kitchen-faucet-with-magnetic
             # -docking-spray-head-includes-lifetime-warranty/f3654345'
 
             products = {}
+            #TODO for url in urls[:5]:
             for url in urls:
                 atmpt = 0
                 while atmpt < 5:
@@ -189,8 +214,39 @@ if __name__ == '__main__':
                         products[url.split("/")[-1]] = prodData(url)
                         break
                     except Exception as e:
+                        atmpt += 1
                         print("Reattempt ",url ,e)
 
 
             with open(f"Faucets Categ-{categID} Data.json" , "w") as file:
                 json.dump(products, file, indent=3)
+
+            mainheaders = []
+            subheaders = []
+            for x in products:
+                for y in products[x]:
+                    if type(products[x][y]) is dict:
+                        for z in products[x][y]:
+                            subheaders.append(y+"\n"+z)
+                    else:
+                        mainheaders.append(y)
+            mainheaders = dedup(mainheaders)
+            subheaders = sorted(list(set(subheaders)))
+            headers = mainheaders + subheaders
+
+            bodyData = []
+            for a in products:
+                rowData = []
+                for x in headers:
+                    if "\n" in x:
+                        try:
+                            rowData.append(products[a][x.split("\n")[0]][x.split("\n")[1]])
+                        except:
+                            rowData.append("")
+                    else:
+                        rowData.append(products[a][x])
+                bodyData.append(rowData)
+
+            finalData = [headers] + bodyData
+
+            csvWrite(finalData, categID)

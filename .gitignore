@@ -5,3 +5,5 @@
 /curl.bash
 /codeBlocks/curl.template.bash
 *Data.json
+*.7z
+*.csv
