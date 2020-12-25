@@ -1,0 +1,16 @@
+curl 'https://rcom.dynamicyield.com/v3/recommend/8773379?_=1607265846317' \
+  -H 'authority: rcom.dynamicyield.com' \
+  -H 'pragma: no-cache' \
+  -H 'cache-control: no-cache' \
+  -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36' \
+  -H 'dnt: 1' \
+  -H 'content-type: text/plain; charset=UTF-8' \
+  -H 'accept: */*' \
+  -H 'origin: https://www.faucet.com' \
+  -H 'sec-fetch-site: cross-site' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'referer: https://www.faucet.com/' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  --data-binary '{"uid":"2756203299971207666","ctx":{"type":"CATEGORY","data":[" All Faucets","Bar Faucets"]},"data":[{"wId":66306,"fId":20017,"maxProducts":6,"rules":[{"id":286084,"type":"exclude","slots":[],"isContextAware":false}],"filtering":[{"type":"exclude","field":"group_id","value":[]}]}],"skusOnly":false}' \
+  --compressed

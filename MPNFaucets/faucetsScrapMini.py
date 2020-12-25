@@ -8,8 +8,8 @@ import time
 from concurrent.futures.thread import ThreadPoolExecutor
 from random import randint
 from selenium.webdriver import ActionChains
-# from selenium import webdriver
-from seleniumwire import webdriver
+from selenium import webdriver
+# from seleniumwire import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -42,33 +42,8 @@ logger.addHandler(stream_handler)
 # ------------------------------------------------------------
 
 
-def searchPageData(categID):
-    # headers = {
-    #     'authority': 'www.faucet.com',
-    #     'pragma': 'no-cache',
-    #     'cache-control': 'no-cache',
-    #     'dnt': '1',
-    #     'upgrade-insecure-requests': '1',
-    #     'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
-    #     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    #     'sec-fetch-site': 'same-origin',
-    #     'sec-fetch-mode': 'navigate',
-    #     'sec-fetch-user': '?1',
-    #     'sec-fetch-dest': 'document',
-    #     'accept-language': 'en-US,en;q=0.9',
-    #     'cookie': re.findall(r"cookie: ([^\n]+)'", curlData)[0]
-    # }
-    #
-    # params = (
-    #     ('term', f'{categID}'),
-    #     ('r', '24'),
-    #     ('s', '_relevance'),
-    #     ('p', '1'),
-    # )
-    #
-    # response = requests.get('https://www.faucet.com/search', headers=headers, params=params)
-    # data = response.text
-    driver = seleniumLiteTrigger()
+def searchPageData(categID, prodState=False):
+    driver = seleniumLiteTrigger(headlessState=prodState)
     try:
         driver.get(f"https://www.faucet.com/search?term={categID}&r=24&s=_relevance&p=1")
         try:
@@ -85,9 +60,9 @@ def searchPageData(categID):
 
 
 
-def seleniumLiteTrigger():
+def seleniumLiteTrigger(headlessState=True):
     options = Options()
-    # options.headless = True
+    options.headless = headlessState
     with open("vpn.config.json") as json_data_file:
         configs = json.load(json_data_file)
     VPN_User = configs['VPN_User']
@@ -123,33 +98,15 @@ def seleniumLiteTrigger():
     #
     logger.debug("Mozilla profile path : " + moz_profPath)
     logger.debug("Mozilla gecko path : " + geckoPath)
-    # driver = webdriver.Firefox(options=options, executable_path=geckoPath,
-    #                            service_log_path="logs/selenium.gecko.log")
-    driver = webdriver.Firefox(options=options, seleniumwire_options=optionsProx, executable_path=geckoPath,
+    driver = webdriver.Firefox(options=options, executable_path=geckoPath,
                                service_log_path="logs/selenium.gecko.log")
+    # driver = webdriver.Firefox(options=options, seleniumwire_options=optionsProx, executable_path=geckoPath,
+    #                            service_log_path="logs/selenium.gecko.log")
     return driver
 
 
-def prodData(url,categID):
-    # headers = {
-    #     'authority': 'www.faucet.com',
-    #     'pragma': 'no-cache',
-    #     'cache-control': 'no-cache',
-    #     'dnt': '1',
-    #     'upgrade-insecure-requests': '1',
-    #     'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36',
-    #     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    #     'sec-fetch-site': 'none',
-    #     'sec-fetch-mode': 'navigate',
-    #     'sec-fetch-user': '?1',
-    #     'sec-fetch-dest': 'document',
-    #     'accept-language': 'en-US,en;q=0.9',
-    #     'cookie': re.findall(r"cookie: ([^\n]+)'", curlData)[0]
-    # }
-    #
-    # response = requests.get(url, headers=headers)
-    # data = response.text
-    driver =seleniumLiteTrigger()
+def prodData(url,categID, prodState=True):
+    driver =seleniumLiteTrigger(headlessState=prodState)
     try:
         driver.get(url)
         try:
@@ -228,7 +185,6 @@ def csvWrite(finalData):
         writer = csv.writer(file)
         writer.writerows(finalData)
 
-
 def dedup(inArr):
     res = []
     for i in inArr:
@@ -236,14 +192,13 @@ def dedup(inArr):
             res.append(i)
     return res
 
-
-def singleCore(categID):
+def singleCore(categID, prodState=True):
     if len(categID) > 2:
         atmptA = 0
         while atmptA < 5:
             try:
                 time.sleep(randint(100,500)/200)
-                url = searchPageData(categID)
+                url = searchPageData(categID, prodState=prodState)
                 break
             except Exception as e:
                 atmptA += 1
@@ -256,7 +211,7 @@ def singleCore(categID):
             try:
                 # products[categID] = prodData(url)
                 time.sleep(randint(100,500)/200)
-                outData = {categID:prodData(url,categID)}
+                outData = {categID:prodData(url,categID, prodState = prodState)}
                 break
             except Exception as e:
                 atmpt += 1
@@ -281,10 +236,11 @@ if __name__ == '__main__':
 
     with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()*2) as executor:
         results = []
-        for categID in categIDs:
-            pass
-            dataOut = executor.submit(singleCore, categID)
-            results.append(dataOut)
+        for categID in categIDs[:2]:
+            if len(categID) > 2:
+                # break
+                dataOut = executor.submit(singleCore, categID, False)
+                results.append(dataOut)
         executor.shutdown(wait=True)
 
     products = {}
